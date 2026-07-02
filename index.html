@@ -1,1 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-br">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Rotas da fé 2026 - Marketing Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Bangers&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f5c518; /* Gold from the flyer */
+            --primary-dark: #b8860b;
+            --accent: #e63946; /* Biker red highlight */
+            --bg-dark: #070708; /* Rich charcoal black */
+            --card-bg: #111113;
+            --text: #ffffff;
+            --text-dim: #a5a5a8;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --neon-glow: 0 0 15px rgba(245, 197, 24, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(245, 197, 24, 0.09) 0%, transparent 50%),
+                radial-gradient(circle at 10% 30%, rgba(230, 57, 70, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(245, 197, 24, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 10px;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .logo-area .subtitle {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            text-shadow: var(--neon-glow);
+        }
+
+        .logo-area h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 4.5rem;
+            background: linear-gradient(to bottom, #ffffff 40%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 0.95;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .logo-area .year {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+            display: block;
+            letter-spacing: 4px;
+            margin-top: 8px;
+            border-top: 1px solid rgba(245, 197, 24, 0.25);
+            border-bottom: 1px solid rgba(245, 197, 24, 0.25);
+            padding: 4px 20px;
+            text-transform: uppercase;
+        }
+
+        .search-container {
+            margin: 0 10px 30px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(245, 197, 24, 0.2);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(15, 15, 17, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            color: var(--text-dim);
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-radius: 40px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: black;
+            box-shadow: 0 4px 15px rgba(245, 197, 24, 0.4);
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .asset-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .asset-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(245, 197, 24, 0.2);
+        }
+
+        .asset-preview {
+            aspect-ratio: 9/16;
+            background: #000;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .asset-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asset-title {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-group {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-share {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            width: 100%;
+            transition: 0.2s;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: black;
+            box-shadow: 0 5px 15px rgba(245, 197, 24, 0.2);
+        }
+
+        .btn-select {
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            transition: 0.2s;
+            background: var(--glass);
+            color: var(--text-dim);
+        }
+
+        .btn-select.active {
+            background: rgba(245, 197, 24, 0.15);
+            color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(245, 197, 24, 0.15);
+        }
+
+        .btn-share:active,
+        .btn-select:active {
+            transform: scale(0.95);
+        }
+
+        .selection-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: #ffffff;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.4s;
+            color: #000;
+            font-weight: 800;
+        }
+
+        .selection-bar.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .btn-bulk {
+            background: #000;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-bulk:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .loader-container {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--glass);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .asset-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <span class="subtitle">ENCONTRO</span>
+                <h1>ROTAS DA FÉ</h1>
+                <span class="year">31 A 02 AGOSTO 2026</span>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Pesquisar arte pelo nome..."
+                oninput="handleSearch()">
+        </div>
+
+        <nav class="nav-tabs" id="mainNav"></nav>
+
+        <main id="contentArea">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <p>Buscando artes...</p>
+            </div>
+        </main>
+
+        <div id="selectionBar" class="selection-bar">
+            <span id="selectionCount">0 selecionadas</span>
+            <button class="btn-bulk" onclick="shareSelected()">COMPARTILHAR TUDO</button>
+        </div>
+    </div>
+
+    <script>
+        const LINK_DO_MEU_SCRIPT = "https://script.google.com/macros/s/AKfycby0hm2xKvh0c9XgJiXwV2Y_GqxbGbsVnj_onzteU0fHc-SYJjN4CvFOBG168AvPzR2_NA/exec";
+        let ASSETS_DATA = {};
+        let currentTab = '';
+        let selectedIds = new Set();
+        let searchTerm = '';
+
+        async function sincronizarComDrive() {
+            try {
+                const response = await fetch(LINK_DO_MEU_SCRIPT);
+                const data = await response.json();
+                ASSETS_DATA = data;
+                const categories = Object.keys(data);
+                if (categories.length > 0) {
+                    if (!currentTab) currentTab = categories[0];
+                    renderTabs(categories);
+                }
+                render();
+            } catch (e) {
+                document.getElementById('contentArea').innerHTML = "Erro ao carregar. Tente novamente.";
+            }
+        }
+
+        function handleSearch() {
+            searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            render();
+        }
+
+        function renderTabs(categories) {
+            const nav = document.getElementById('mainNav');
+            nav.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${currentTab === cat ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => { currentTab = cat; render(); renderTabs(categories); };
+                nav.appendChild(btn);
+            });
+        }
+
+        function render() {
+            const container = document.getElementById('contentArea');
+            const data = ASSETS_DATA[currentTab] || [];
+
+            // Filtro de busca
+            let filteredData = data.filter(item =>
+                item.title.toLowerCase().includes(searchTerm)
+            );
+
+            // Ordenação personalizada: Letras primeiro, Números por último
+            filteredData.sort((a, b) => {
+                const titleA = a.title.trim();
+                const titleB = b.title.trim();
+                const startsWithNumA = /^[0-9]/.test(titleA);
+                const startsWithNumB = /^[0-9]/.test(titleB);
+
+                if (!startsWithNumA && startsWithNumB) return -1;
+                if (startsWithNumA && !startsWithNumB) return 1;
+
+                return titleA.localeCompare(titleB, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            let html = `<div class="asset-grid">`;
+            filteredData.forEach(item => {
+                const isSelected = selectedIds.has(item.id);
+                html += `
+                <div class="asset-card ${isSelected ? 'selected' : ''}">
+                    <div class="asset-preview" onclick="toggleSelect('${item.id}')">
+                        ${item.isVideo ? '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-size:3rem; opacity:0.7;">▶</div>' : ''}
+                        <img src="${item.url}" alt="Rotas da Fé">
+                    </div>
+                    <div class="btn-group">
+                        <span class="asset-title">${item.title}</span>
+                        <button class="btn-share" onclick="shareAsset('${item.url}', '${item.title}')">
+                            📤 COMPARTILHAR
+                        </button>
+                        <button class="btn-select ${isSelected ? 'active' : ''}" onclick="toggleSelect('${item.id}')">
+                            ${isSelected ? '✓ SELECIONADO' : '➕ SELECIONAR VÁRIOS'}
+                        </button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+
+        function toggleSelect(id) {
+            if (id) {
+                if (selectedIds.has(id)) selectedIds.delete(id);
+                else selectedIds.add(id);
+            }
+            const bar = document.getElementById('selectionBar');
+            document.getElementById('selectionCount').innerText = selectedIds.size + " selecionadas";
+            if (selectedIds.size > 0) bar.classList.add('visible');
+            else bar.classList.remove('visible');
+            render();
+        }
+
+        async function shareAsset(url, title) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const fileName = `${title}.jpg`;
+                const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+                if (navigator.share && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: title
+                    });
+                } else {
+                    baixar(url, title);
+                }
+            } catch (err) { baixar(url, title); }
+        }
+
+        function baixar(url, title = 'rotas_da_fe') {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title}.jpg`;
+            a.click();
+        }
+
+        async function shareSelected() {
+            const items = ASSETS_DATA[currentTab].filter(i => selectedIds.has(i.id));
+            if (items.length === 0) return;
+
+            const btn = document.querySelector('.btn-bulk');
+            const originalText = btn.innerText;
+            btn.innerText = "PREPARANDO...";
+            btn.disabled = true;
+
+            try {
+                const files = [];
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    const res = await fetch(item.url);
+                    const blob = await res.blob();
+                    const fileName = `${item.title}.jpg`;
+                    files.push(new File([blob], fileName, { type: 'image/jpeg' }));
+                }
+
+                if (navigator.share && navigator.canShare({ files })) {
+                    await navigator.share({
+                        files: files,
+                        title: 'Rotas da Fé 2026'
+                    });
+                    selectedIds.clear();
+                    toggleSelect(null);
+                } else {
+                    alert("Baixando selecionados...");
+                    for (const item of items) {
+                        baixar(item.url, item.title);
+                        await new Promise(r => setTimeout(r, 500));
+                    }
+                }
+            } catch (err) {
+                alert("Erro ao preparar arquivos.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', sincronizarComDrive);
+    </script>
+</body>
+
+</html>
